@@ -32,7 +32,7 @@ class InitRepository {
     if (!dir.existsSync()) {
       await dir.create(recursive: true);
     }
-    ByteData data = await rootBundle.load("lib/assets/flutter.db");
+    ByteData data = await rootBundle.load("assets/flutter.db");
     List<int> bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     await File(dbPath).writeAsBytes(bytes, flush: true);

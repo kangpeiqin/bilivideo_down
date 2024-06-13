@@ -8,5 +8,8 @@
 	<true/>
 	<key>com.apple.security.network.server</key>
 	<true/>
+	<!-- Required to fetch data from the internet. -->
+	<key>com.apple.security.network.client</key>
+	<true/>
 </dict>
 </plist>

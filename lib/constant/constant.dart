@@ -10,7 +10,7 @@ class Constant {
 
   static const bool inProduction = kReleaseMode;
 
-  static const String _baseAssetPath = 'lib/assets/images';
+  static const String _baseAssetPath = 'assets/images';
 
   static const String logoImagePath = '$_baseAssetPath/logo.png';
 
