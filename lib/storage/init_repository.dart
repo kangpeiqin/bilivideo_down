@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bilivideo_down/constant/constant.dart';
 import 'package:bilivideo_down/storage/db_open_helper.dart';
 import 'package:bilivideo_down/storage/flutter_db_storage.dart';
 import 'package:common_utils/common_utils.dart';
@@ -32,7 +33,7 @@ class InitRepository {
     if (!dir.existsSync()) {
       await dir.create(recursive: true);
     }
-    ByteData data = await rootBundle.load("assets/flutter.db");
+    ByteData data = await rootBundle.load(Constant.dbPath);
     List<int> bytes =
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     await File(dbPath).writeAsBytes(bytes, flush: true);
