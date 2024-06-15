@@ -27,6 +27,9 @@ flutter run -d macOS
 
 ![演示 DEMO](./docs/product.gif)
 
+## 声明
+该项目仅用于学习交流，切勿用于其他
+
 ## 开源协议
 
-[MIT](https://opensource.org/license/mit/)
+[GPL](https://opensource.org/license/gpl-3-0)
