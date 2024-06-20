@@ -3,33 +3,38 @@
 
 <h1 align="center">BiliVideoDown</h1>
 
-BiliVideoDown 是一款基于 `Flutter` 开发的桌面端 B 站视频下载器。
+English / [简体中文](./README_CN.md)
 
-![主界面](./docs/product.png)
+BiliVideoDown is a desktop app primarily designed for download video of bilibili website (https://www.bilibili.com/).
+
+![main page](./docs/product.png)
 
 </div>
 
-## 支持的平台
+## Support Platform
 
 - windows 10
 - macOS
 
-## 本地开发运行
+## Local Development
 
 ```
-# windows 平台
+# windows platform
 flutter run -d windows
-# macOS 平台
+# macOS platform
 flutter run -d macOS
 ```
 
-## 演示 DEMO
+## Screenshots
 
-![演示 DEMO](./docs/product.gif)
+![Screenshots](./docs/product.gif)
 
-## 声明
-该项目仅用于学习交流，切勿用于其他
+## Others
 
-## 开源协议
+I've created a WeChat group specifically for Flutter developers. If you're interested in, just scan the code below.
+
+<img src="./docs/qrCode.jpg" alt="预览" style="width: 100px; height: 100px;"/>
+
+## License
 
 [GPL](https://opensource.org/license/gpl-3-0)
