@@ -29,7 +29,7 @@ flutter run -d macOS
 
 ## 其他
 
-创建了一个 Flutter 技术产品交流群，欢迎关注入群。
+创建了一个 Flutter 技术产品交流群，欢迎关注并发送关键字“交流群”。
 
 <img src="./docs/qrCode.jpg" alt="预览" style="width: 100px; height: 100px;"/>
 

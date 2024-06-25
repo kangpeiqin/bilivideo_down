@@ -31,7 +31,7 @@ flutter run -d macOS
 
 ## Others
 
-I've created a WeChat group specifically for Flutter developers. If you're interested in, just scan the code below.
+I've created a WeChat group specifically for Flutter developers. If you're interested in, just scan the code below and send message "交流群".
 
 <img src="./docs/qrCode.jpg" alt="预览" style="width: 100px; height: 100px;"/>
 
