@@ -23,12 +23,19 @@ dependencies:
   sp_util: ^2.0.3
   video_player_win: ^2.3.6
   permission_handler: ^11.3.1
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  dart_mappable: ^4.2.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^3.0.0
+  riverpod_generator: ^2.4.0
+  riverpod_lint: ^2.3.10
+  dart_mappable_builder: ^4.2.3
+  build_runner: ^2.4.9
 
 flutter:
   uses-material-design: true

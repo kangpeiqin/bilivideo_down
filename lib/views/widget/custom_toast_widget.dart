@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//自定义
+//自定义弹窗
 class CustomToast {
   late final OverlayEntry _overlayEntry;
   late final BuildContext _context;

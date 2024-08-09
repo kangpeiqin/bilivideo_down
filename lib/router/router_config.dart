@@ -1,3 +1,4 @@
+import 'package:bilivideo_down/view/search_view.dart';
 import 'package:bilivideo_down/views/nav/desk_navigate.dart';
 import 'package:bilivideo_down/views/nav/download_nav.dart';
 import 'package:bilivideo_down/views/pages/search_page.dart';
@@ -17,14 +18,6 @@ class RouterPath {
     download,
     settings,
   ];
-
-//根据路由获取当前活跃的索引
-  static int? activeIndex(String path) {
-    int index =
-        RouterPath.pagesRoutePaths.indexWhere((menu) => menu.contains(path));
-    if (index == -1) return null;
-    return index;
-  }
 }
 
 final GoRouter routerConfig = GoRouter(
@@ -38,7 +31,8 @@ final GoRouter routerConfig = GoRouter(
         GoRoute(
           path: RouterPath.search,
           builder: (BuildContext context, GoRouterState state) =>
-              const SearchPage(),
+              // const SearchPage(),
+              const SearchView(),
         ),
         GoRoute(
           path: RouterPath.download,
