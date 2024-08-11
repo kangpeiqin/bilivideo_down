@@ -1,4 +1,4 @@
-import 'package:bilivideo_down/entity/video_info_entity.dart';
+import 'package:bilivideo_down/model/video_info.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -7,7 +7,7 @@ class VideoInfoDao {
 
   VideoInfoDao(this.db);
 
-  Future<int> insert(VideoInfoEntity videoInfo) async {
+  Future<int> insert(VideoInfo videoInfo) async {
     String addSql = "INSERT INTO "
         "video_info(bvid,aid,cid,pic,title,pubdate,ctime,desc,duration,downloadStatus,playUrl,length,size,location,created,updated) "
         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
@@ -68,13 +68,12 @@ class VideoInfoDao {
     return await db.execute("DELETE FROM video_info");
   }
 
-  Future<List<VideoInfoEntity>> queryAll() async {
+  Future<List<VideoInfo>> queryAll() async {
     List<Map<String, dynamic>> data = await db.rawQuery(
         "SELECT bvid,aid,cid,pic,title,pubdate,ctime,`desc`,duration,downloadStatus,playUrl,length,size,location "
         "FROM video_info "
         "ORDER BY created desc");
-    List<VideoInfoEntity> result =
-        data.map((e) => VideoInfoEntity.fromJson(e)).toList();
+    List<VideoInfo> result = data.map((e) => VideoInfo.fromJson(e)).toList();
     return result;
   }
 }

@@ -1,15 +1,15 @@
-import 'package:bilivideo_down/entity/video_info_entity.dart';
+import 'package:bilivideo_down/model/video_info.dart';
 import 'package:bilivideo_down/util/common_util.dart';
 import 'package:bilivideo_down/views/widget/video_palyer_ui.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 
-class VideoCard extends StatelessWidget {
-  final VideoInfoEntity video;
+class VideoCardWidget extends StatelessWidget {
+  final VideoInfo video;
   final VoidCallback onDelete;
   final VoidCallback onDownload;
 
-  const VideoCard({
+  const VideoCardWidget({
     super.key,
     required this.video,
     required this.onDelete,

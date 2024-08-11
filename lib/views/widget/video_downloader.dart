@@ -1,10 +1,10 @@
-import 'package:bilivideo_down/controller/downloading_controller.dart';
-import 'package:bilivideo_down/entity/video_info_entity.dart';
+import 'package:bilivideo_down/model/video_info.dart';
+import 'package:bilivideo_down/provider/downloading_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class VideoDownloader extends StatefulWidget {
-  final VideoInfoEntity video;
+class VideoDownloader extends ConsumerStatefulWidget {
+  final VideoInfo video;
   final VoidCallback onDelete;
 
   const VideoDownloader({
@@ -14,23 +14,25 @@ class VideoDownloader extends StatefulWidget {
   });
 
   @override
-  State<VideoDownloader> createState() => _VideoDownloaderState();
+  ConsumerState<VideoDownloader> createState() => _VideoDownloaderState();
 }
 
-class _VideoDownloaderState extends State<VideoDownloader> {
-  var downController = Get.find<DownloadingController>();
-
-  Future<void> _toggleDownload() async {
-    if (downController.getVideoDownStatus(widget.video.bvid)) {
-      downController.getVideoInfoByBvid(widget.video.bvid).cancelToken.cancel();
-      downController.updateDownStatus(widget.video.bvid, false);
-    } else {
-      downController.startDownload(widget.video.bvid);
-    }
-  }
-
+class _VideoDownloaderState extends ConsumerState<VideoDownloader> {
   @override
   Widget build(BuildContext context) {
+    final downloadingService = ref.read(downloadingProvider.notifier);
+    void toggleDownload() {
+      if (downloadingService.getVideoDownStatus(widget.video.bvid)) {
+        downloadingService
+            .getVideoInfoByBvid(widget.video.bvid)
+            .cancelToken
+            .cancel();
+        downloadingService.updateDownStatus(widget.video.bvid, false);
+      } else {
+        downloadingService.startDownload(widget.video.bvid);
+      }
+    }
+
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
@@ -75,14 +77,15 @@ class _VideoDownloaderState extends State<VideoDownloader> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          downController.getProgressMsg(widget.video.bvid),
+                          downloadingService.getProgressMsg(widget.video.bvid),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 10),
                         LinearProgressIndicator(
-                          value: downController.getProgress(widget.video.bvid),
+                          value:
+                              downloadingService.getProgress(widget.video.bvid),
                           minHeight: 10,
                           valueColor:
                               const AlwaysStoppedAnimation<Color>(Colors.blue),
@@ -99,13 +102,13 @@ class _VideoDownloaderState extends State<VideoDownloader> {
             top: 4,
             child: IconButton(
               icon: Icon(
-                downController.getVideoDownStatus(widget.video.bvid)
+                downloadingService.getVideoDownStatus(widget.video.bvid)
                     ? Icons.pause
                     : Icons.play_arrow,
                 size: 20,
               ),
-              onPressed: _toggleDownload,
-              tooltip: downController.getVideoDownStatus(widget.video.bvid)
+              onPressed: toggleDownload,
+              tooltip: downloadingService.getVideoDownStatus(widget.video.bvid)
                   ? '暂停'
                   : '开始',
             ),
@@ -116,7 +119,7 @@ class _VideoDownloaderState extends State<VideoDownloader> {
             child: IconButton(
               icon: const Icon(Icons.close, size: 20),
               onPressed: () {
-                downController
+                downloadingService
                     .getVideoInfoByBvid(widget.video.bvid)
                     .cancelToken
                     .cancel();

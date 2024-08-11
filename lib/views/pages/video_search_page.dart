@@ -1,23 +1,41 @@
 import 'package:bilivideo_down/constant/constant.dart';
-import 'package:bilivideo_down/controller/bili_video_search_controller.dart';
+import 'package:bilivideo_down/provider/video_search_provider.dart';
 import 'package:bilivideo_down/views/widget/collapse_widget.dart';
+import 'package:bilivideo_down/views/widget/custom_toast_widget.dart';
 import 'package:bilivideo_down/window_config/window_buttons.dart';
+import 'package:bilivideo_down/window_config/windows_adapter.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:window_manager/window_manager.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+class VideoSearchPage extends ConsumerStatefulWidget {
+  const VideoSearchPage({super.key});
+
+  @override
+  ConsumerState<VideoSearchPage> createState() => _VideoSearchState();
+}
+
+class _VideoSearchState extends ConsumerState<VideoSearchPage> {
   @override
   Widget build(BuildContext context) {
     GlobalKey inputKey = GlobalKey();
-    var searchController = Get.find<BiliVideoSearchController>();
+    final videoState = ref.watch(videoSearchProvider);
+    final searchService = ref.read(videoSearchProvider.notifier);
+    final searchController = ref.watch(searchControllerProvider);
+    if (videoState.msg != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final msgToast = CustomToast(context: context, inputKey: inputKey);
+        msgToast.message = videoState.msg!;
+        msgToast.iconWidget = const Icon(Icons.close, color: Colors.red);
+        msgToast.showInDuration();
+      });
+    }
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: DragToMoveArea(
-            child: AppBar(actions: const [WindowButtons()]),
-          )),
+        preferredSize: const Size.fromHeight(30),
+        child: DragToMoveArea(
+          child: AppBar(actions: const [WindowButtons()]),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -35,8 +53,7 @@ class SearchPage extends StatelessWidget {
                   width: 450,
                   child: TextField(
                     key: inputKey,
-                    controller: searchController.controller,
-                    // key: inputKey,
+                    controller: searchController,
                     decoration: const InputDecoration(
                       hintText: '请输入B站视频链接',
                       border: OutlineInputBorder(
@@ -56,29 +73,27 @@ class SearchPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 20),
                   ),
-                  onPressed: searchController.isLoading.isFalse
-                      ? () {
-                          searchController.handleSearch(
-                              searchController.controller.text,
-                              context,
-                              inputKey);
-                        }
-                      : null,
+                  onPressed: () {
+                    final input = searchController.text.trim();
+                    searchService.handleSearch(input);
+                  },
                   child: const Text('搜索'),
                 )
               ],
             ),
             const SizedBox(height: 25),
-            Obx(
-              () => searchController.episodeList.isNotEmpty
-                  ? SizedBox(
-                      width: 580,
-                      child: CollapseWidget(
-                        inputKey: inputKey,
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            )
+            videoState.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : videoState.episodes.isNotEmpty
+                    ? SizedBox(
+                        width: 580,
+                        child: CollapseWidget(
+                          inputKey: inputKey,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
           ],
         ),
       ),

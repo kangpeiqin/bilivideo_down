@@ -42,4 +42,20 @@ class VideoInfo with VideoInfoMappable {
     this.downStatus = false,
     this.location = '',
   });
+
+  factory VideoInfo.fromJson(Map<String, dynamic> json) => VideoInfo(
+        bvid: json["bvid"],
+        aid: json["aid"],
+        cid: json["cid"],
+        pic: json["pic"],
+        title: json["title"],
+        pubdate: json["pubdate"],
+        ctime: json["ctime"],
+        desc: json["desc"],
+        duration: json["duration"],
+        playUrl: json['playUrl'],
+        length: json['length'],
+        size: json['size'],
+        location: json['location'],
+      );
 }

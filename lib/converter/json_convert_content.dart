@@ -1,6 +1,6 @@
-import 'package:bilivideo_down/entity/video_info_entity.dart';
 import 'package:bilivideo_down/entity/video_play_info_entity.dart';
 import 'package:bilivideo_down/entity/video_sec_entity.dart';
+import 'package:bilivideo_down/model/video_info.dart';
 import 'package:bilivideo_down/util/log_util.dart';
 
 JsonConverter jsonConvert = JsonConverter();
@@ -74,8 +74,8 @@ class JsonConverter {
   //Go back to a single instance by type
   static M? _fromJsonSingle<M>(Map<String, dynamic> json) {
     final String type = M.toString();
-    if (type == (VideoInfoEntity).toString()) {
-      return VideoInfoEntity.fromJson(json) as M;
+    if (type == (VideoInfo).toString()) {
+      return VideoInfo.fromJson(json) as M;
     }
     if (type == (VideoSecEntity).toString()) {
       return VideoSecEntity.fromJson(json) as M;
@@ -89,10 +89,8 @@ class JsonConverter {
 
   //list is returned by type
   static M? _getListChildType<M>(List<dynamic> data) {
-    if (<VideoInfoEntity>[] is M) {
-      return data
-          .map<VideoInfoEntity>((e) => VideoInfoEntity.fromJson(e))
-          .toList() as M;
+    if (<VideoInfo>[] is M) {
+      return data.map<VideoInfo>((e) => VideoInfo.fromJson(e)).toList() as M;
     }
     Log.e("${M.toString()} not found");
     return null;

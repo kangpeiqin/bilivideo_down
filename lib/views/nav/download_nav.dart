@@ -1,6 +1,6 @@
-import 'package:bilivideo_down/views/pages/download_complete_page.dart';
-import 'package:bilivideo_down/views/pages/downloading_page.dart';
-import 'package:bilivideo_down/views/pages/wait_download_page.dart';
+import 'package:bilivideo_down/views/pages/download/download_complete_page.dart';
+import 'package:bilivideo_down/views/pages/download/downloading_page.dart';
+import 'package:bilivideo_down/views/pages/download/wait_download_page.dart';
 import 'package:bilivideo_down/window_config/window_buttons.dart';
 import 'package:bilivideo_down/window_config/windows_adapter.dart';
 import 'package:flutter/material.dart';

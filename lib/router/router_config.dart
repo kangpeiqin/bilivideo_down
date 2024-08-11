@@ -1,8 +1,7 @@
-import 'package:bilivideo_down/view/search_view.dart';
 import 'package:bilivideo_down/views/nav/desk_navigate.dart';
 import 'package:bilivideo_down/views/nav/download_nav.dart';
-import 'package:bilivideo_down/views/pages/search_page.dart';
 import 'package:bilivideo_down/views/pages/setting_page.dart';
+import 'package:bilivideo_down/views/pages/video_search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,8 +30,7 @@ final GoRouter routerConfig = GoRouter(
         GoRoute(
           path: RouterPath.search,
           builder: (BuildContext context, GoRouterState state) =>
-              // const SearchPage(),
-              const SearchView(),
+              const VideoSearchPage(),
         ),
         GoRoute(
           path: RouterPath.download,
