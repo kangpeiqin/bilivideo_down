@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bilivideo_down/controller/download_complete_controller.dart';
 import 'package:bilivideo_down/util/common_util.dart';
+import 'package:bilivideo_down/util/log_util.dart';
 import 'package:bilivideo_down/views/widget/video_palyer_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -28,15 +29,16 @@ class VideoDownCompletePage extends StatelessWidget {
               child: Stack(
                 children: [
                   InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return VideoPlayerUI(
-                              videoUrl: videoList[index].playUrl);
-                        },
-                      );
-                    },
+                    // 播放链接随着时间拉长会失效
+                    // onTap: () {
+                    //   showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext context) {
+                    //       return VideoPlayerUI(
+                    //           videoUrl: videoList[index].playUrl);
+                    //     },
+                    //   );
+                    // },
                     child: Row(
                       children: [
                         Container(
@@ -101,7 +103,17 @@ class VideoDownCompletePage extends StatelessWidget {
                     top: 4,
                     child: IconButton(
                       icon: const Icon(Icons.folder, size: 20),
-                      onPressed: () => openDirectory(videoList[index].location),
+                      onPressed: () async {
+                        final success =
+                            await openDirectory(videoList[index].location);
+                        if (!success) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (context.mounted) {
+                              showErrorDialog(context);
+                            }
+                          });
+                        }
+                      },
                       tooltip: '打开文件夹',
                     ),
                   ),
@@ -126,12 +138,38 @@ class VideoDownCompletePage extends StatelessWidget {
   }
 }
 
-Future<void> openDirectory(String storePath) async {
-  if (Directory(storePath).existsSync()) {
-    if (Platform.isWindows) {
-      await Process.run('explorer', [storePath]);
-    } else if (Platform.isMacOS) {
-      await Process.run('open', [storePath]);
+Future<bool> openDirectory(String storePath) async {
+  try {
+    if (Directory(storePath).existsSync()) {
+      if (Platform.isWindows) {
+        await Process.run('explorer', [storePath]);
+      } else if (Platform.isMacOS) {
+        await Process.run('open', [storePath]);
+      }
+      return true; // Directory opened successfully
+    } else {
+      return false; // Directory does not exist
     }
+  } catch (e) {
+    Log.e("Error opening directory: $e"); // Log the error
+    return false; // Failed to open directory
   }
+}
+
+void showErrorDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('打开文件夹失败'),
+      content: const Text('文件夹已被删除，无法打开指定的文件夹'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('确定'),
+        ),
+      ],
+    ),
+  );
 }

@@ -164,6 +164,13 @@ class _CollapseWidgetState extends State<CollapseWidget> {
                               }
                             }, onError: (code, msg) {
                               debugPrint('$code, $msg');
+                              final loadingToast = CustomToast(
+                                  context: context,
+                                  inputKey: widget.inputKey,
+                                  iconWidget: const Icon(Icons.notifications,
+                                      color: Colors.white),
+                                  message: msg);
+                              loadingToast.showInDuration();
                             }));
                           } catch (e) {
                             Log.e(e.toString());
