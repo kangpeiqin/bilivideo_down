@@ -105,7 +105,8 @@ class DownloadingService extends StateNotifier<DownloadingState> {
         DateUtil.formatDate(DateTime.now(), format: DateFormats.y_mo_d);
 
     String savePath = path.join(storagePath, '下载合集_$currentDate');
-    final String fileName = path.join(savePath, '${video.title}.mp4');
+    final saveFileName = CommonUtil.sanitizeFileName(video.title);
+    final String fileName = path.join(savePath, '$saveFileName.mp4');
     final cancelToken = CancelToken();
 
     video = video.copyWith(location: savePath, cancelToken: cancelToken);

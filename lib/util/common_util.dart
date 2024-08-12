@@ -28,4 +28,12 @@ class CommonUtil {
 
     return '$minutes分钟$seconds秒';
   }
+
+  static String sanitizeFileName(String fileName) {
+    final illegalCharacters = ['<', '>', ':', '"', '/', '\\', '|', '?', '*'];
+
+    return fileName.split('').map((char) {
+      return illegalCharacters.contains(char) ? '_' : char;
+    }).join('');
+  }
 }
