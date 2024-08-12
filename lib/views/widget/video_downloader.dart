@@ -1,5 +1,6 @@
 import 'package:bilivideo_down/model/video_info.dart';
 import 'package:bilivideo_down/provider/downloading_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,18 +22,6 @@ class _VideoDownloaderState extends ConsumerState<VideoDownloader> {
   @override
   Widget build(BuildContext context) {
     final downloadingService = ref.read(downloadingProvider.notifier);
-    void toggleDownload() {
-      if (downloadingService.getVideoDownStatus(widget.video.bvid)) {
-        downloadingService
-            .getVideoInfoByBvid(widget.video.bvid)
-            .cancelToken
-            .cancel();
-        downloadingService.updateDownStatus(widget.video.bvid, false);
-      } else {
-        downloadingService.startDownload(widget.video.bvid);
-      }
-    }
-
     return Card(
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
@@ -107,7 +96,17 @@ class _VideoDownloaderState extends ConsumerState<VideoDownloader> {
                     : Icons.play_arrow,
                 size: 20,
               ),
-              onPressed: toggleDownload,
+              onPressed: () {
+                if (downloadingService.getVideoDownStatus(widget.video.bvid)) {
+                  CancelToken cancelToken = downloadingService
+                      .getVideoInfoByBvid(widget.video.bvid)
+                      .cancelToken;
+                  cancelToken.cancel();
+                  downloadingService.updateDownStatus(widget.video.bvid, false);
+                } else {
+                  downloadingService.startDownload(widget.video.bvid);
+                }
+              },
               tooltip: downloadingService.getVideoDownStatus(widget.video.bvid)
                   ? '暂停'
                   : '开始',

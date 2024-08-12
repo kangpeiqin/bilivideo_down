@@ -41,7 +41,8 @@ class VideoInfo with VideoInfoMappable {
     this.progressMsg = '',
     this.downStatus = false,
     this.location = '',
-  });
+    CancelToken? cancelToken,
+  }) : cancelToken = cancelToken ?? CancelToken();
 
   factory VideoInfo.fromJson(Map<String, dynamic> json) => VideoInfo(
         bvid: json["bvid"],

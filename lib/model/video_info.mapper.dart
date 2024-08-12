@@ -65,7 +65,7 @@ class VideoInfoMapper extends ClassMapperBase<VideoInfo> {
       Field('location', _$location, opt: true, def: '');
   static CancelToken _$cancelToken(VideoInfo v) => v.cancelToken;
   static const Field<VideoInfo, CancelToken> _f$cancelToken =
-      Field('cancelToken', _$cancelToken, mode: FieldMode.member);
+      Field('cancelToken', _$cancelToken, opt: true);
 
   @override
   final MappableFields<VideoInfo> fields = const {
@@ -107,7 +107,8 @@ class VideoInfoMapper extends ClassMapperBase<VideoInfo> {
         progress: data.dec(_f$progress),
         progressMsg: data.dec(_f$progressMsg),
         downStatus: data.dec(_f$downStatus),
-        location: data.dec(_f$location));
+        location: data.dec(_f$location),
+        cancelToken: data.dec(_f$cancelToken));
   }
 
   @override
@@ -177,7 +178,8 @@ abstract class VideoInfoCopyWith<$R, $In extends VideoInfo, $Out>
       double? progress,
       String? progressMsg,
       bool? downStatus,
-      String? location});
+      String? location,
+      CancelToken? cancelToken});
   VideoInfoCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -207,7 +209,8 @@ class _VideoInfoCopyWithImpl<$R, $Out>
           double? progress,
           String? progressMsg,
           bool? downStatus,
-          String? location}) =>
+          String? location,
+          Object? cancelToken = $none}) =>
       $apply(FieldCopyWithData({
         if (bvid != null) #bvid: bvid,
         if (aid != null) #aid: aid,
@@ -225,7 +228,8 @@ class _VideoInfoCopyWithImpl<$R, $Out>
         if (progress != null) #progress: progress,
         if (progressMsg != null) #progressMsg: progressMsg,
         if (downStatus != null) #downStatus: downStatus,
-        if (location != null) #location: location
+        if (location != null) #location: location,
+        if (cancelToken != $none) #cancelToken: cancelToken
       }));
   @override
   VideoInfo $make(CopyWithData data) => VideoInfo(
@@ -245,7 +249,8 @@ class _VideoInfoCopyWithImpl<$R, $Out>
       progress: data.get(#progress, or: $value.progress),
       progressMsg: data.get(#progressMsg, or: $value.progressMsg),
       downStatus: data.get(#downStatus, or: $value.downStatus),
-      location: data.get(#location, or: $value.location));
+      location: data.get(#location, or: $value.location),
+      cancelToken: data.get(#cancelToken, or: $value.cancelToken));
 
   @override
   VideoInfoCopyWith<$R2, VideoInfo, $Out2> $chain<$R2, $Out2>(

@@ -65,10 +65,11 @@ class DownloadingService extends StateNotifier<DownloadingState> {
     state = state.copyWith(videoInfoList: updatedList);
   }
 
-  void updateDownStatus(String bvid, bool downStatus) {
+  void updateDownStatus(String bvid, bool downStatus,
+      {CancelToken? cancelToken}) {
     final updatedList = state.videoInfoList.map((video) {
       if (video.bvid == bvid) {
-        return video.copyWith(downStatus: downStatus);
+        return video.copyWith(downStatus: downStatus, cancelToken: cancelToken);
       }
       return video;
     }).toList();
@@ -105,16 +106,16 @@ class DownloadingService extends StateNotifier<DownloadingState> {
 
     String savePath = path.join(storagePath, '下载合集_$currentDate');
     final String fileName = path.join(savePath, '${video.title}.mp4');
-    updateDownStatus(bvid, true);
+    final cancelToken = CancelToken();
 
-    video = video.copyWith(location: savePath);
+    video = video.copyWith(location: savePath, cancelToken: cancelToken);
+    updateDownStatus(bvid, true, cancelToken: cancelToken);
     downloadFile(url, fileName, video);
   }
 
   Future<void> downloadFile(
       String url, String savePath, VideoInfo video) async {
     try {
-      video.cancelToken = CancelToken();
       await RangeDownloadUtil.downloadWithChunks(
         url,
         savePath,
