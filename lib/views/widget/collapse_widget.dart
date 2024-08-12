@@ -133,41 +133,51 @@ class _VideoListViewState extends ConsumerState<CollapseWidget> {
                     videoState.episodes.where((item) => item.checked).forEach(
                       (element) async {
                         try {
-                          futures.add(DioUtil.instance
-                              .requestNetwork<VideoPlayInfoEntity>(
-                                  Method.get, HttpApi.biliBiliVideoPlayUrl,
-                                  queryParameters: {
-                                'avid': element.aid,
-                                'cid': element.cid,
-                                'qn': 80,
-                                'platform': 'html5',
-                                'otype': 'json',
-                                'high_quality': 1
-                              }, onSuccess: (data) async {
-                            if (data != null) {
-                              bool exist =
-                                  downloadStateService.exist(element.bvid);
-                              if (!exist) {
-                                Durl durl = data.durl[0];
-                                Log.d('视频下载地址：${durl.url}');
-                                VideoInfo infoEntity = VideoInfo(
-                                    bvid: element.bvid,
-                                    aid: element.aid,
-                                    cid: element.cid,
-                                    pic: element.arc.pic,
-                                    title: element.title,
-                                    pubdate: element.arc.pubdate,
-                                    ctime: element.arc.ctime,
-                                    desc: "",
-                                    duration: durl.length,
-                                    playUrl: durl.url,
-                                    size: durl.size);
-                                downloadStateService.add(infoEntity);
+                          futures.add(
+                            DioUtil.instance
+                                .requestNetwork<VideoPlayInfoEntity>(
+                                    Method.get, HttpApi.biliBiliVideoPlayUrl,
+                                    queryParameters: {
+                                  'avid': element.aid,
+                                  'cid': element.cid,
+                                  'qn': 80,
+                                  'platform': 'html5',
+                                  'otype': 'json',
+                                  'high_quality': 1
+                                }, onSuccess: (data) async {
+                              if (data != null) {
+                                bool exist =
+                                    downloadStateService.exist(element.bvid);
+                                if (!exist) {
+                                  Durl durl = data.durl[0];
+                                  Log.d('视频下载地址：${durl.url}');
+                                  VideoInfo infoEntity = VideoInfo(
+                                      bvid: element.bvid,
+                                      aid: element.aid,
+                                      cid: element.cid,
+                                      pic: element.arc.pic,
+                                      title: element.title,
+                                      pubdate: element.arc.pubdate,
+                                      ctime: element.arc.ctime,
+                                      desc: "",
+                                      duration: durl.length,
+                                      playUrl: durl.url,
+                                      size: durl.size);
+                                  downloadStateService.add(infoEntity);
+                                }
                               }
-                            }
-                          }, onError: (code, msg) {
-                            debugPrint('$code, $msg');
-                          }));
+                            }, onError: (code, msg) {
+                              debugPrint('$code, $msg');
+                              //请求异常弹窗
+                              final netWorkError = CustomToast(
+                                  context: context,
+                                  inputKey: widget.inputKey,
+                                  iconWidget: const Icon(Icons.wifi,
+                                      color: Colors.white),
+                                  message: msg);
+                              netWorkError.showInDuration();
+                            }),
+                          );
                         } catch (e) {
                           Log.e(e.toString());
                         }

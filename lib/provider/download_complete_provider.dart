@@ -23,12 +23,12 @@ class DownCompleteService extends StateNotifier<List<VideoInfo>> {
   Future<void> addVideo(VideoInfo video) async {
     if (state.any((element) => element.bvid == video.bvid)) return;
     await infoDao.insert(video);
-    refreshVideoList();
+    await refreshVideoList(); // Ensure that UI is refreshed after deleting
   }
 
   Future<void> deleteVideo(String bvid) async {
     await infoDao.deleteByBvid(bvid);
-    refreshVideoList();
+    await refreshVideoList(); // Ensure that UI is refreshed after deleting
   }
 
   Future<void> refreshVideoList() async {

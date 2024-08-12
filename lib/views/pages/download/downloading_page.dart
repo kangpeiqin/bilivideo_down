@@ -13,7 +13,7 @@ class DownloadingPage extends ConsumerStatefulWidget {
 class _DownloadingPageState extends ConsumerState<DownloadingPage> {
   @override
   Widget build(BuildContext context) {
-    final downloadingState = ref.read(downloadingProvider);
+    final downloadingState = ref.watch(downloadingProvider);
     final downloadingService = ref.read(downloadingProvider.notifier);
     return Scaffold(
       body: Column(

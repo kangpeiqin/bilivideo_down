@@ -121,8 +121,8 @@ class _VideoPlayerDialogState extends State<VideoPlayerUI> {
                 children: [
                   if (_controller.value.isInitialized)
                     Slider(
-                      activeColor: Colors.white,
-                      inactiveColor: Colors.white.withOpacity(0.5),
+                      activeColor: Colors.blue,
+                      inactiveColor: Colors.grey.withOpacity(0.5),
                       value: _progressValue,
                       onChanged: (newValue) {
                         setState(() {
@@ -154,7 +154,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerUI> {
                               _controller.value.isPlaying
                                   ? Icons.pause
                                   : Icons.play_arrow,
-                              color: Colors.white,
+                              color: Colors.grey,
                             ),
                           ),
                           IconButton(
@@ -168,12 +168,12 @@ class _VideoPlayerDialogState extends State<VideoPlayerUI> {
                             },
                             icon: const Icon(
                               Icons.fast_forward,
-                              color: Colors.white,
+                              color: Colors.grey,
                             ),
                           ),
                           Text(
                             '${CommonUtil.formatDuration(_controller.value.position)} / ${CommonUtil.formatDuration(_controller.value.duration)}',
-                            style: const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.grey),
                           ),
                         ],
                       ),
