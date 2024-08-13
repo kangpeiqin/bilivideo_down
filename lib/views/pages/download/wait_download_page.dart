@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bilivideo_down/constant/constant.dart';
 import 'package:bilivideo_down/constant/sp_key.dart';
 import 'package:bilivideo_down/provider/downloading_provider.dart';
 import 'package:bilivideo_down/provider/wait_download_provider.dart';
@@ -25,46 +26,53 @@ class _WaitDownloadPageState extends ConsumerState<WaitDownloadPage> {
     final downloadingService = ref.read(downloadingProvider.notifier);
 
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: waitDownloadState.videoInfoList.length,
-              itemBuilder: (BuildContext context, int index) {
-                int reversedIndex =
-                    waitDownloadState.videoInfoList.length - 1 - index;
+      body: waitDownloadState.videoInfoList.isEmpty
+          ? Center(
+              child: SizedBox(
+                child: Image.asset('${Constant.baseAssetPath}/empty.png'),
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: waitDownloadState.videoInfoList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      int reversedIndex =
+                          waitDownloadState.videoInfoList.length - 1 - index;
 
-                return VideoCardWidget(
-                  video: waitDownloadState.videoInfoList[reversedIndex],
-                  onDelete: () {
-                    downloadService.removeAt(reversedIndex);
-                    setState(() {});
-                  },
-                  onDownload: () async {
-                    if (Platform.isMacOS) {
-                      bool accessStatus = await handlePathSelection(context);
-                      if (accessStatus == false) {
-                        return;
-                      }
-                    }
+                      return VideoCardWidget(
+                        video: waitDownloadState.videoInfoList[reversedIndex],
+                        onDelete: () {
+                          downloadService.removeAt(reversedIndex);
+                          setState(() {});
+                        },
+                        onDownload: () async {
+                          if (Platform.isMacOS) {
+                            bool accessStatus =
+                                await handlePathSelection(context);
+                            if (accessStatus == false) {
+                              return;
+                            }
+                          }
 
-                    downloadingService.addUnique(
-                        waitDownloadState.videoInfoList[reversedIndex]);
-                    final downloadNavigationState = context
-                        .findAncestorStateOfType<DownloadTabsPageState>();
-                    downloadNavigationState?.navigateToTab(1);
-                    downloadService.removeAt(reversedIndex);
-                  },
-                );
-              },
+                          downloadingService.addUnique(
+                              waitDownloadState.videoInfoList[reversedIndex]);
+                          final downloadNavigationState = context
+                              .findAncestorStateOfType<DownloadTabsPageState>();
+                          downloadNavigationState?.navigateToTab(1);
+                          downloadService.removeAt(reversedIndex);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
