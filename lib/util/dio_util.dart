@@ -81,9 +81,9 @@ class DioUtil {
     try {
       final String data = response.data.toString();
       final bool isCompute = !Constant.isDriverTest && data.length > 10 * 1024;
-      debugPrint('isCompute:$isCompute');
       final Map<String, dynamic> map =
           isCompute ? await compute(parseData, data) : parseData(data);
+      // debugPrint('获取数据:$map');
       return BaseEntity<T>.fromJson(map);
     } catch (e) {
       debugPrint(e.toString());

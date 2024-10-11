@@ -17,6 +17,7 @@ class VideoSecEntity {
   int cid;
   int? seasonId;
   UgcSeason? ugcSeason;
+  List<Page>? pages;
 
   VideoSecEntity({
     required this.bvid,
@@ -30,6 +31,7 @@ class VideoSecEntity {
     required this.cid,
     required this.seasonId,
     required this.ugcSeason,
+    this.pages,
   });
 
   factory VideoSecEntity.fromJson(Map<String, dynamic> json) => VideoSecEntity(
@@ -45,6 +47,9 @@ class VideoSecEntity {
         seasonId: json["season_id"],
         ugcSeason: json["ugc_season"] != null
             ? UgcSeason.fromJson(json["ugc_season"])
+            : null,
+        pages: json["pages"] != null
+            ? List<Page>.from(json["pages"].map((x) => Page.fromJson(x)))
             : null,
       );
 
@@ -187,5 +192,49 @@ class Arc {
         "pic": pic,
         "pubdate": pubdate,
         "ctime": ctime,
+      };
+}
+
+class Page {
+  int cid;
+  int page;
+  String from;
+  String pagePart;
+  int duration;
+  String vid;
+  String weblink;
+  String firstFrame;
+
+  Page({
+    required this.cid,
+    required this.page,
+    required this.from,
+    required this.pagePart,
+    required this.duration,
+    required this.vid,
+    required this.weblink,
+    required this.firstFrame,
+  });
+
+  factory Page.fromJson(Map<String, dynamic> json) => Page(
+        cid: json["cid"],
+        page: json["page"],
+        from: json["from"],
+        pagePart: json["part"],
+        duration: json["duration"],
+        vid: json["vid"],
+        weblink: json["weblink"],
+        firstFrame: json["first_frame"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "cid": cid,
+        "page": page,
+        "from": from,
+        "part": pagePart,
+        "duration": duration,
+        "vid": vid,
+        "weblink": weblink,
+        "first_frame": firstFrame,
       };
 }

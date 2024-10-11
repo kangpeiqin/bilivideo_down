@@ -53,6 +53,22 @@ class VideoSearchService extends StateNotifier<VideoState> {
             if (ugcSeason != null) {
               final List<Episode> episodes = ugcSeason.sections[0].episodes;
               state = state.copyWith(episodes: episodes, isLoading: false);
+            } else if (data.pages?.isNotEmpty ?? false) {
+              List<Episode> episodes = [];
+              data.pages?.forEach((element) {
+                Episode episode = Episode(
+                    aid: data.aid,
+                    cid: element.cid,
+                    title: element.pagePart,
+                    bvid: '$bv+${element.cid}',
+                    arc: Arc(
+                        pic: element.firstFrame,
+                        pubdate: data.pubdate,
+                        ctime: data.ctime));
+                episodes.add(episode);
+                // Log.d('${episode.toJson()}');
+              });
+              state = state.copyWith(episodes: episodes, isLoading: false);
             } else {
               try {
                 //获取下载链接

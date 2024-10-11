@@ -132,6 +132,7 @@ class _VideoListViewState extends ConsumerState<CollapseWidget> {
                     List<Future<void>> futures = [];
                     videoState.episodes.where((item) => item.checked).forEach(
                       (element) async {
+                        // Log.d('---${element.toJson()}');
                         try {
                           futures.add(
                             DioUtil.instance
