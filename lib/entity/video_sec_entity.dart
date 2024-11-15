@@ -199,21 +199,21 @@ class Page {
   int cid;
   int page;
   String from;
-  String pagePart;
+  String? pagePart;
   int duration;
   String vid;
   String weblink;
-  String firstFrame;
+  String? firstFrame;
 
   Page({
     required this.cid,
     required this.page,
     required this.from,
-    required this.pagePart,
+    this.pagePart,
     required this.duration,
     required this.vid,
     required this.weblink,
-    required this.firstFrame,
+    this.firstFrame,
   });
 
   factory Page.fromJson(Map<String, dynamic> json) => Page(

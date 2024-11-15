@@ -56,13 +56,16 @@ class VideoSearchService extends StateNotifier<VideoState> {
             } else if (data.pages?.isNotEmpty ?? false) {
               List<Episode> episodes = [];
               data.pages?.forEach((element) {
+                String? pagePart =
+                    element.pagePart ?? ""; // 如果 pagePart 为空，可以使用默认值
+                String? firstFrame = element.firstFrame ?? "";
                 Episode episode = Episode(
                     aid: data.aid,
                     cid: element.cid,
-                    title: element.pagePart,
+                    title: pagePart,
                     bvid: '$bv+${element.cid}',
                     arc: Arc(
-                        pic: element.firstFrame,
+                        pic: firstFrame,
                         pubdate: data.pubdate,
                         ctime: data.ctime));
                 episodes.add(episode);
