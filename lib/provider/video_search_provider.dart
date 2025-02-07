@@ -49,6 +49,7 @@ class VideoSearchService extends StateNotifier<VideoState> {
         queryParameters: {'bvid': bv},
         onSuccess: (data) async {
           if (data != null) {
+            Log.d('获取到数据：${data.toJson()}');
             final ugcSeason = data.ugcSeason;
             if (ugcSeason != null) {
               final List<Episode> episodes = ugcSeason.sections[0].episodes;
