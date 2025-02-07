@@ -15,7 +15,7 @@ BiliVideoDown 是一款基于 `Flutter` 开发的桌面端 B 站视频下载器�
 - macOS
 
 ## 本地开发运行
-
+有两个分支：main 分支使用 GetX 进行状态管理，dev 分支使用 Riverpod 进行状态管理。
 ```
 # windows 平台
 flutter run -d windows
@@ -26,12 +26,6 @@ flutter run -d macOS
 ## 演示 DEMO
 
 ![演示 DEMO](./docs/product.gif)
-
-## 其他
-
-创建了一个 Flutter 技术产品交流群，欢迎关注并发送关键字“交流群”。
-
-<img src="./docs/qrCode.jpg" alt="预览" style="width: 100px; height: 100px;"/>
 
 ## 声明
 

@@ -17,7 +17,7 @@ BiliVideoDown is a desktop app primarily designed for download video of bilibili
 - macOS
 
 ## Local Development
-
+There are two branches: the main branch uses GetX for state management, while the dev branch uses Riverpod for state management.
 ```
 # windows platform
 flutter run -d windows
@@ -25,15 +25,9 @@ flutter run -d windows
 flutter run -d macOS
 ```
 
-## Screenshots
+## Screenshot
 
-![Screenshots](./docs/product.gif)
-
-## Others
-
-I've created a WeChat group specifically for Flutter developers. If you're interested in, just scan the code below and send message "交流群".
-
-<img src="./docs/qrCode.jpg" alt="预览" style="width: 100px; height: 100px;"/>
+![Screenshot](./docs/product.gif)
 
 ## License
 
