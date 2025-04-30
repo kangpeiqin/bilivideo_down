@@ -1,0 +1,110 @@
+name: Build & Release
+on:
+  push:
+    tags:
+      - 'v*'
+      - 'beta-*'
+      - 'alpha-*'
+
+permissions:
+  contents: write
+
+jobs:
+  build_windows: # 重命名 job 以明确其目的
+    runs-on: windows-latest # 直接指定 Windows 环境
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get version from pubspec.yaml and determine release type
+        id: get_version
+        shell: bash
+        run: |
+          VERSION=$( grep '^version:' pubspec.yaml | cut -d ' ' -f 2 | cut -d '+' -f 1 )
+          if [[ ${{ github.ref }} == refs/tags/alpha-* ]]; then
+            echo "IS_ALPHA=true" >> $GITHUB_ENV
+            echo "IS_BETA=false" >> $GITHUB_ENV
+            echo "VERSION=alpha-${VERSION}" >> $GITHUB_ENV
+          elif [[ ${{ github.ref }} == refs/tags/beta-* ]]; then
+            echo "IS_ALPHA=false" >> $GITHUB_ENV
+            echo "IS_BETA=true" >> $GITHUB_ENV
+            echo "VERSION=beta-${VERSION}" >> $GITHUB_ENV
+          else
+            echo "IS_ALPHA=false" >> $GITHUB_ENV
+            echo "IS_BETA=false" >> $GITHUB_ENV
+            echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          fi
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.29.2' 
+
+      - name: Get Dependencies
+        run: |
+          flutter --version
+          flutter pub get
+
+      - name: Prepare for Windows
+        # if: matrix.platform == 'windows' # 不再需要条件判断
+        shell: bash
+        run: |
+          flutter config --enable-windows-desktop
+          sed -i "1i #define MyAppVersion \"${{ env.VERSION }}\"" scripts/compile_windows_setup-inno.iss
+
+      - name: Install winget
+        # if: matrix.platform == 'windows' # 不再需要条件判断
+        uses: Cyberboss/install-winget@v1
+
+      - name: Build for Windows
+        # if: matrix.platform == 'windows' # 不再需要条件判断
+        shell: pwsh
+        run: ./scripts/compile_windows_zip.ps1
+
+      - name: Upload Windows zip
+        # if: matrix.platform == 'windows' # 不再需要条件判断
+        uses: actions/upload-artifact@v4
+        id: upload-windows-zip
+        with:
+          name: windows-zip
+          path: build/windows/bilivideo_down.zip
+          if-no-files-found: error
+
+      - name: Extract release notes
+        id: extract_release_notes
+        run: |
+          VERSION=${{ env.VERSION }}
+          if [[ $VERSION == beta-* ]] || [[ $VERSION == alpha-* ]]; then
+            MAIN_VERSION=$(echo $VERSION | cut -d'-' -f2 | cut -d'-' -f1)
+          else
+            MAIN_VERSION=$VERSION
+          fi
+          # 注意：确保 changelog.md 文件存在且格式正确
+          CHANGELOG_CONTENT=$(sed -n "/## $MAIN_VERSION/,/## /p" changelog.md | sed '$d' || echo "Could not extract release notes.")
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$CHANGELOG_CONTENT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Upload artifacts
+        if: env.IS_ALPHA == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-artifacts # 直接命名为 windows-artifacts
+          path: |                 # 只上传 Windows 文件
+            build/windows/*.zip
+            build/windows/*.exe
+          if-no-files-found: warn
+
+      - name: Create Release
+        if: env.IS_ALPHA != 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |                 # 只包含 Windows 文件
+            build/windows/*.zip
+            build/windows/*.exe
+          body: ${{ env.RELEASE_NOTES }}
+          generate_release_notes: false
+          prerelease: ${{ env.IS_BETA == 'true' }}

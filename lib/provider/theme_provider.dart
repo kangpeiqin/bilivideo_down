@@ -6,7 +6,6 @@ import 'package:sp_util/sp_util.dart';
 
 final themeProvider = StateNotifierProvider<ThemeService, ThemeState>((ref) {
   final themeService = ThemeService();
-  // Initialize the theme service
   themeService.init();
   return themeService;
 });

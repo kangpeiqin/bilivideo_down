@@ -26,6 +26,7 @@ dependencies:
   riverpod_annotation: ^2.3.5
   dart_mappable: ^4.2.2
   icons_launcher: ^2.1.7
+  fl_chart: ^0.70.1
 
 dev_dependencies:
   flutter_test:
