@@ -53,11 +53,11 @@ class _WaitDownloadPageState extends ConsumerState<WaitDownloadPage> {
                       }
                     }
 
-                    downloadingService.addUnique(
-                        waitDownloadState.videoInfoList[reversedIndex]);
-                    final downloadNavigationState = context
-                        .findAncestorStateOfType<DownloadTabsPageState>();
-                    downloadNavigationState?.navigateToTab(1);
+                    // downloadingService.addUnique(
+                    //     waitDownloadState.videoInfoList[reversedIndex]);
+                    // final downloadNavigationState = context
+                    //     .findAncestorStateOfType<DownloadTabsPageState>();
+                    // downloadNavigationState?.navigateToTab(1);
                     downloadService.removeAt(reversedIndex);
                   },
                 );
