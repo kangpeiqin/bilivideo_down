@@ -10,8 +10,8 @@ permissions:
   contents: write
 
 jobs:
-  build_windows: # 重命名 job 以明确其目的
-    runs-on: windows-latest # 直接指定 Windows 环境
+  build_windows: 
+    runs-on: windows-latest 
 
     steps:
       - name: Checkout repository
@@ -48,23 +48,21 @@ jobs:
           flutter pub get
 
       - name: Prepare for Windows
-        # if: matrix.platform == 'windows' # 不再需要条件判断
+        if: matrix.platform == 'windows' 
         shell: bash
         run: |
           flutter config --enable-windows-desktop
-          sed -i "1i #define MyAppVersion \"${{ env.VERSION }}\"" scripts/compile_windows_setup-inno.iss
 
       - name: Install winget
-        # if: matrix.platform == 'windows' # 不再需要条件判断
+        if: matrix.platform == 'windows'
         uses: Cyberboss/install-winget@v1
 
       - name: Build for Windows
-        # if: matrix.platform == 'windows' # 不再需要条件判断
+        if: matrix.platform == 'windows'
         shell: pwsh
         run: ./scripts/compile_windows_zip.ps1
 
       - name: Upload Windows zip
-        # if: matrix.platform == 'windows' # 不再需要条件判断
         uses: actions/upload-artifact@v4
         id: upload-windows-zip
         with:
@@ -81,7 +79,6 @@ jobs:
           else
             MAIN_VERSION=$VERSION
           fi
-          # 注意：确保 changelog.md 文件存在且格式正确
           CHANGELOG_CONTENT=$(sed -n "/## $MAIN_VERSION/,/## /p" changelog.md | sed '$d' || echo "Could not extract release notes.")
           echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
           echo "$CHANGELOG_CONTENT" >> $GITHUB_ENV
@@ -92,19 +89,17 @@ jobs:
         if: env.IS_ALPHA == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: windows-artifacts # 直接命名为 windows-artifacts
-          path: |                 # 只上传 Windows 文件
+          name: windows-artifacts 
+          path: |                 
             build/windows/*.zip
-            build/windows/*.exe
           if-no-files-found: warn
 
       - name: Create Release
         if: env.IS_ALPHA != 'true'
         uses: softprops/action-gh-release@v2
         with:
-          files: |                 # 只包含 Windows 文件
+          files: |                
             build/windows/*.zip
-            build/windows/*.exe
           body: ${{ env.RELEASE_NOTES }}
           generate_release_notes: false
           prerelease: ${{ env.IS_BETA == 'true' }}
