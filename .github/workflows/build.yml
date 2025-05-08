@@ -40,7 +40,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: '3.29.2' 
+          flutter-version: '3.19.6' 
 
       - name: Get Dependencies
         run: |
